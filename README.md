@@ -15,11 +15,11 @@ The only deliverable in this repo is [`accountill-notes.md`](./accountill-notes.
   Evidence: path/to/file:line [Confirmed]
 ```
 
-Four claims are things the AI agent got right, and I confirmed each one by opening the cited line. The fifth is a claim the agent got **wrong**, which I corrected.
+Four claims are things the AI agent got right, and I confirmed each one by opening the cited lines (a fact that is an absence found by search, such as "no file imports the auth middleware", is tagged `[Likely]`, not `[Confirmed]`). The fifth is a claim the agent got **wrong**, which I corrected.
 
 | # | Claim | Where to look |
 |---|---|---|
-| 1 | Every server route is open. The auth middleware exists but is never imported or mounted. | `server/index.js:32-35` |
+| 1 | Every server route is open: no route has an auth check. (The auth middleware also looks unused, which is tagged Likely because it is an absence.) | `server/index.js:32-35` |
 | 2 | `GET /clients` returns every user's clients, with no owner filter. | `server/controllers/clients.js:44-45` |
 | 3 | All PDFs are written to one shared `invoice.pdf`, and `GET /fetch-pdf` serves it to anyone. | `server/index.js:57,88,97-99` |
 | 4 | Invoice numbers are `count + 1`, computed in the browser, with no unique index. | `client/src/components/Invoice/Invoice.js:93-96` |

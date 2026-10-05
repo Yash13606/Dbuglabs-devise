@@ -1,17 +1,19 @@
 # accountill-notes.md
 
 Solo lab: **accountill** (MERN invoicing app). 5 claims in OBSERVATIONS format.
-Four claims the agents got right and I confirmed by opening the lines. One claim an agent got wrong, which I corrected (claim 5).
+Four claims the agents got right and I confirmed by opening the lines (a fact that is an absence found by search, such as "no file imports X", is tagged `[Likely]`, not `[Confirmed]`). One claim an agent got wrong, which I corrected (claim 5).
 
 Tags: `[Confirmed]` I opened the line and it proves the claim. `[Likely]` strong signs, no single line proves it. `[Guess]` no evidence, never used as fact.
 Read-only: nothing was run, installed or changed in the original repo. All paths are relative to `accountill/`.
 
 ---
 
-## Claim 1: every server route is open, because the auth middleware is never used
+## Claim 1: every server route is open, because no route has an auth check
 
-- All 24 server endpoints can be called by anyone: `server/middleware/auth.js` exists but no file imports it, and no router or `app.use` attaches any auth.
-  Evidence: `server/index.js:32-35` (routers mounted with no middleware), `server/routes/clients.js:6-10` and `server/routes/invoices.js:6-11` (handlers only), `server/middleware/auth.js:7` (defined, never imported) [Confirmed]
+- No server route is wrapped in any auth check: the routers are mounted, and every route is registered with a handler only. So all 24 server endpoints can be called by anyone.
+  Evidence: `server/index.js:32-35` (routers mounted with no middleware), `server/routes/clients.js:6-10` and `server/routes/invoices.js:6-11` (handlers only) [Confirmed]
+- The auth middleware is defined but no file imports it. This is an absence found by searching `server/`, not something one line proves, so it is only `[Likely]`.
+  Evidence: `server/middleware/auth.js:7` (defined); a search of `server/` for `middleware/auth` found no importer [Likely]
 - The client does send `Authorization: Bearer <token>`, but the server never reads it.
   Evidence: `client/src/api/index.js:6-12` [Confirmed]
 
